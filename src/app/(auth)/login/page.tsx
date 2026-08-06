@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { Briefcase, Lock, Mail, Loader2, LogIn, ArrowRight } from "lucide-react";
+import { Briefcase, Lock, Mail, Loader2, LogIn, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -58,32 +58,38 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 px-4 py-12 text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white transition-colors duration-300">
-      <div className="w-full max-w-md space-y-8 rounded-2xl border border-slate-200 bg-white p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900/60 backdrop-blur-xl">
+      <div className="w-full max-w-md space-y-7 rounded-3xl border border-slate-200 bg-white p-7 sm:p-9 shadow-2xl dark:border-slate-800 dark:bg-slate-900/90 backdrop-blur-2xl">
         {/* Brand Header */}
-        <div className="text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-500 shadow-md shadow-indigo-500/25">
-            <Briefcase className="h-6 w-6 text-white" />
+        <div className="text-center space-y-2">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/30">
+            <Briefcase className="h-7 w-7 text-white" />
           </div>
-          <h2 className="mt-4 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
             Welcome back
           </h2>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">
             Sign in to access your job application pipeline
           </p>
         </div>
 
         {/* Demo Quick Sign In */}
-        <div className="rounded-xl border border-indigo-200 bg-indigo-50/70 p-4 dark:border-indigo-500/20 dark:bg-gradient-to-r dark:from-indigo-950/40 dark:to-purple-950/30">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-indigo-700 dark:text-indigo-300">Quick Demo Account</p>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">demo@example.com (password123)</p>
+        <div className="rounded-2xl border border-indigo-200/90 bg-indigo-50/80 p-4 dark:border-indigo-500/40 dark:bg-indigo-950/70 shadow-sm transition-all">
+          <div className="flex items-center justify-between gap-3">
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-950 dark:text-indigo-200">
+                <Sparkles className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
+                <span>Quick Demo Account</span>
+              </div>
+              <p className="text-xs font-semibold text-slate-700 dark:text-slate-200">
+                demo@example.com <span className="text-slate-500 dark:text-slate-400 font-normal">(password123)</span>
+              </p>
             </div>
             <Button
+              type="button"
               onClick={handleQuickDemoLogin}
               disabled={loading}
               size="sm"
-              className="gap-1.5 bg-indigo-600 font-semibold text-white hover:bg-indigo-500"
+              className="gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 font-semibold text-white shadow-md shadow-indigo-500/25 hover:from-indigo-500 hover:to-purple-500 shrink-0 px-3.5"
             >
               <span>Instant Demo</span>
               <ArrowRight className="h-3.5 w-3.5" />
@@ -91,9 +97,10 @@ export default function LoginPage() {
           </div>
         </div>
 
+        {/* Divider */}
         <div className="relative flex items-center justify-center">
           <div className="w-full border-t border-slate-200 dark:border-slate-800" />
-          <span className="absolute bg-white dark:bg-slate-900 px-3 text-[11px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+          <span className="absolute bg-white dark:bg-slate-900 px-3 text-[11px] font-bold text-slate-500 dark:text-slate-300 uppercase tracking-wider">
             Or sign in with email
           </span>
         </div>
@@ -101,37 +108,41 @@ export default function LoginPage() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           {errorMsg && (
-            <div className="rounded-lg bg-rose-50 border border-rose-200 p-3 text-xs font-semibold text-rose-700 dark:bg-rose-500/10 dark:border-rose-500/20 dark:text-rose-400">
+            <div className="rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs font-semibold text-rose-700 dark:bg-rose-500/10 dark:border-rose-500/20 dark:text-rose-400">
               {errorMsg}
             </div>
           )}
 
           <div>
-            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Email Address</label>
-            <div className="relative mt-1">
-              <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
+            <label className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+              Email Address
+            </label>
+            <div className="relative mt-1.5">
+              <Mail className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-400" />
               <Input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="pl-9 bg-white border-slate-200 text-slate-900 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-200 focus-visible:ring-indigo-500"
+                className="h-11 pl-10 rounded-xl bg-slate-50/50 border-slate-200 text-slate-900 font-medium placeholder:text-slate-400 focus:bg-white dark:bg-slate-950 dark:border-slate-800 dark:text-white dark:placeholder:text-slate-400 focus-visible:ring-indigo-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Password</label>
-            <div className="relative mt-1">
-              <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
+            <label className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+              Password
+            </label>
+            <div className="relative mt-1.5">
+              <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-400" />
               <Input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="pl-9 bg-white border-slate-200 text-slate-900 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-200 focus-visible:ring-indigo-500"
+                className="h-11 pl-10 rounded-xl bg-slate-50/50 border-slate-200 text-slate-900 font-medium placeholder:text-slate-400 focus:bg-white dark:bg-slate-950 dark:border-slate-800 dark:text-white dark:placeholder:text-slate-400 focus-visible:ring-indigo-500"
               />
             </div>
           </div>
@@ -139,14 +150,14 @@ export default function LoginPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 font-semibold text-white shadow-md shadow-indigo-500/20 hover:from-indigo-500 hover:to-purple-500"
+            className="h-11 w-full gap-2 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 hover:from-indigo-500 hover:to-purple-500 transition-all mt-2"
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogIn className="h-4 w-4" />}
             Sign In
           </Button>
         </form>
 
-        <div className="text-center text-xs text-slate-500 dark:text-slate-400">
+        <div className="text-center text-xs font-medium text-slate-600 dark:text-slate-300 pt-1">
           Don't have an account?{" "}
           <Link href="/register" className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
             Create account
