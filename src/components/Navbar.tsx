@@ -31,10 +31,11 @@ export function Navbar({
     <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/95 transition-colors duration-300 shadow-sm">
       <div className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between px-3 sm:px-6 lg:px-8 gap-2">
         {/* Brand Header Left */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-600 shadow-md shadow-indigo-500/20">
-            <Briefcase className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 overflow-hidden items-center justify-center rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md p-1">
+            <img src="/logo.png" alt="Job Application Tracker Logo" className="h-full w-full object-contain" />
           </div>
+
           <div className="hidden sm:flex flex-col justify-center">
             <h1 className="text-base lg:text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100 whitespace-nowrap">
               Job Application Tracker
