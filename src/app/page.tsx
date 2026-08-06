@@ -156,15 +156,15 @@ export default function DashboardPage() {
       {/* Main Container */}
       <main className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* ── Hero Banner ── */}
-        <div className="relative overflow-hidden rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-sm dark:border-slate-800/60 dark:bg-slate-900/60 transition-all">
+        <div className="relative overflow-hidden rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-sm dark:border-slate-800/60 dark:bg-slate-900/60 transition-all" suppressHydrationWarning>
           {/* Subtle gradient blob */}
           <div className="pointer-events-none absolute -top-16 -right-16 h-64 w-64 rounded-full bg-indigo-400/10 blur-3xl dark:bg-indigo-500/10" />
           <div className="pointer-events-none absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-purple-400/10 blur-2xl dark:bg-purple-500/10" />
 
-          <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 p-6 sm:p-7">
+          <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 p-6 sm:p-7" suppressHydrationWarning>
 
             {/* Left — greeting & meta */}
-            <div className="flex items-center gap-4 min-w-0">
+            <div className="flex items-center gap-4 min-w-0" suppressHydrationWarning>
               {/* Pulse dot */}
               <div className="hidden sm:flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md shadow-indigo-500/30">
                 <Sparkles className="h-5 w-5 text-white" />

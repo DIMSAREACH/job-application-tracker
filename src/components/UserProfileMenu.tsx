@@ -46,14 +46,14 @@ export function UserProfileMenu({
 
   return (
     <>
-      <div ref={containerRef} className="relative shrink-0">
+      <div ref={containerRef} className="relative shrink-0" suppressHydrationWarning>
         {/* Trigger Button - Clean Circular Profile Photo with Pulse Online Badge */}
         <button
           onClick={() => setOpen(!open)}
           className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-slate-900 p-0.5 shadow-md border-2 border-indigo-500/30 hover:border-indigo-500 dark:border-indigo-400/30 dark:hover:border-indigo-400 hover:scale-105 transition-all cursor-pointer shrink-0"
           title={`${displayName} (Online) - Profile & Settings`}
         >
-          <div className="flex h-full w-full overflow-hidden items-center justify-center rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-xs font-bold text-white shadow-inner">
+          <div className="flex h-full w-full overflow-hidden items-center justify-center rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-xs font-bold text-white shadow-inner" suppressHydrationWarning>
             {userImage ? (
               <img
                 src={userImage}
