@@ -30,7 +30,7 @@ export default function DashboardPage() {
   const [userProfile, setUserProfile] = useState<{ name?: string | null; email?: string | null; image?: string | null } | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [lastSynced, setLastSynced] = useState<Date>(new Date());
+  const [lastSynced, setLastSynced] = useState<Date | null>(null);
   const [viewMode, setViewMode] = useState<"kanban" | "table">("kanban");
 
   // Modal States
@@ -183,7 +183,8 @@ export default function DashboardPage() {
               size="icon"
               onClick={() => fetchApplications(false)}
               disabled={refreshing}
-              title={`Last synced: ${lastSynced.toLocaleTimeString()}`}
+              title={lastSynced ? `Last synced: ${lastSynced.toLocaleTimeString("en-GB")}` : "Refresh"}
+              suppressHydrationWarning
               className="h-10 w-10 rounded-xl border-slate-300 bg-white/80 dark:bg-slate-900/80 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-900 transition-all"
             >
               <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin text-indigo-600" : ""}`} />
