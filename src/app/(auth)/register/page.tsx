@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { registerUserAction } from "@/actions/auth-actions";
 import { signIn } from "next-auth/react";
-import { Briefcase, Lock, Mail, User, Loader2, UserPlus, Eye, EyeOff } from "lucide-react";
+import { Briefcase, Lock, Mail, User, Loader2, UserPlus, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -14,7 +14,11 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -22,6 +26,12 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     setErrorMsg("");
+
+    if (password !== confirmPassword) {
+      setLoading(false);
+      setErrorMsg("Passwords do not match. Please check and try again.");
+      return;
+    }
 
     const res = await registerUserAction({ name, email, password });
 
@@ -72,6 +82,7 @@ export default function RegisterPage() {
             </div>
           )}
 
+          {/* Full Name */}
           <div>
             <label className="text-xs font-semibold text-slate-800 dark:text-slate-200">
               Full Name
@@ -89,6 +100,7 @@ export default function RegisterPage() {
             </div>
           </div>
 
+          {/* Email */}
           <div>
             <label className="text-xs font-semibold text-slate-800 dark:text-slate-200">
               Email Address
@@ -106,6 +118,7 @@ export default function RegisterPage() {
             </div>
           </div>
 
+          {/* Password */}
           <div>
             <label className="text-xs font-semibold text-slate-800 dark:text-slate-200">
               Password
@@ -134,6 +147,52 @@ export default function RegisterPage() {
                 )}
               </button>
             </div>
+          </div>
+
+          {/* Confirm Password */}
+          <div>
+            <label className="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center justify-between">
+              <span>Confirm Password</span>
+              {confirmPassword && password === confirmPassword && (
+                <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                  <CheckCircle2 className="h-3 w-3" />
+                  <span>Passwords Match</span>
+                </span>
+              )}
+            </label>
+            <div className="relative mt-1.5">
+              <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-400" />
+              <Input
+                type={showConfirmPassword ? "text" : "password"}
+                required
+                minLength={6}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Re-enter your password"
+                className={`h-11 pl-10 pr-10 rounded-xl bg-slate-50/50 border-slate-200 text-slate-900 font-medium placeholder:text-slate-400 focus:bg-white dark:bg-slate-950 dark:border-slate-800 dark:text-white dark:placeholder:text-slate-400 focus-visible:ring-indigo-500 ${
+                  confirmPassword && password !== confirmPassword
+                    ? "border-rose-400 focus-visible:ring-rose-500"
+                    : ""
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors"
+                title={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+              >
+                {showConfirmPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </button>
+            </div>
+            {confirmPassword && password !== confirmPassword && (
+              <p className="mt-1 text-[11px] font-semibold text-rose-500">
+                Passwords do not match
+              </p>
+            )}
           </div>
 
           <Button

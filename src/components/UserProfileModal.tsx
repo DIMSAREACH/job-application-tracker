@@ -41,8 +41,12 @@ export function UserProfileModal({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [image, setImage] = useState<string | null>(null);
+
   const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(false);
@@ -66,7 +70,9 @@ export function UserProfileModal({
     if (open) {
       loadProfile();
       setNewPassword("");
+      setConfirmPassword("");
       setShowPassword(false);
+      setShowConfirmPassword(false);
     }
   }, [open]);
 
@@ -96,6 +102,12 @@ export function UserProfileModal({
     setErrorMsg("");
     setSuccessMsg("");
 
+    if (newPassword && newPassword !== confirmPassword) {
+      setLoading(false);
+      setErrorMsg("New passwords do not match. Please verify and try again.");
+      return;
+    }
+
     const res = await updateUserProfileAction({
       name,
       image,
@@ -107,6 +119,7 @@ export function UserProfileModal({
     if (res.success) {
       setSuccessMsg("Profile updated successfully!");
       setNewPassword("");
+      setConfirmPassword("");
       if (onProfileUpdated) onProfileUpdated();
       setTimeout(() => {
         onOpenChange(false);
@@ -240,35 +253,68 @@ export function UserProfileModal({
               </div>
             </div>
 
-            {/* Change Password (with Eye / EyeOff Toggle) */}
-            <div>
-              <label className="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center justify-between">
-                <span>New Password</span>
-                <span className="text-[11px] font-normal text-slate-400">
-                  (Leave blank to keep current)
-                </span>
-              </label>
-              <div className="relative mt-1.5">
-                <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-400" />
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="At least 6 characters"
-                  className="h-11 pl-10 pr-10 rounded-xl bg-slate-50/50 border-slate-200 text-slate-900 font-medium dark:bg-slate-900 dark:border-slate-800 dark:text-white focus-visible:ring-indigo-500"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors"
-                  title={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
+            {/* New Password & Confirm New Password Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* New Password */}
+              <div>
+                <label className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                  New Password
+                </label>
+                <div className="relative mt-1.5">
+                  <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-400" />
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Min 6 chars"
+                    className="h-11 pl-10 pr-9 rounded-xl bg-slate-50/50 border-slate-200 text-slate-900 font-medium dark:bg-slate-900 dark:border-slate-800 dark:text-white focus-visible:ring-indigo-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors"
+                    title={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-3.5 w-3.5" />
+                    ) : (
+                      <Eye className="h-3.5 w-3.5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Confirm New Password */}
+              <div>
+                <label className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                  Confirm Password
+                </label>
+                <div className="relative mt-1.5">
+                  <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-400" />
+                  <Input
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Re-enter"
+                    className={`h-11 pl-10 pr-9 rounded-xl bg-slate-50/50 border-slate-200 text-slate-900 font-medium dark:bg-slate-900 dark:border-slate-800 dark:text-white focus-visible:ring-indigo-500 ${
+                      confirmPassword && newPassword !== confirmPassword
+                        ? "border-rose-400 focus-visible:ring-rose-500"
+                        : ""
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors"
+                    title={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-3.5 w-3.5" />
+                    ) : (
+                      <Eye className="h-3.5 w-3.5" />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
 
