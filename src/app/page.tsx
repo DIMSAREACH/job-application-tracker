@@ -9,6 +9,7 @@ import {
   toggleInterviewedAction,
 } from "@/actions/application-actions";
 import { getCurrentUserProfileAction } from "@/actions/auth-actions";
+import { Navbar } from "@/components/Navbar";
 import { Sidebar } from "@/components/Sidebar";
 import { DashboardSummary } from "@/components/DashboardSummary";
 import { DashboardAnalytics } from "@/components/DashboardAnalytics";
@@ -163,6 +164,18 @@ export default function DashboardPage() {
 
       {/* ── Main Content Area ── */}
       <div className="lg:pl-64 flex flex-col min-h-screen transition-all duration-300">
+        {/* Top Navbar Header */}
+        <Navbar
+          onOpenAddModal={() => setAddModalOpen(true)}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          totalApps={optimisticApps.length}
+          userName={currentUserName}
+          userEmail={currentUserEmail}
+          userImage={currentUserImage}
+          onProfileUpdated={fetchUserProfile}
+        />
+
         <main className="flex-1 mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8 py-6 space-y-8">
         {/* ── Hero Banner Card ── */}
         <div className="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-gradient-to-r from-white via-indigo-50/30 to-purple-50/40 p-5 sm:p-7 shadow-lg shadow-indigo-500/5 dark:border-slate-800 dark:from-slate-900 dark:via-slate-900/95 dark:to-indigo-950/40 dark:shadow-2xl transition-all" suppressHydrationWarning>
