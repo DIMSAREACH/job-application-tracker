@@ -32,7 +32,10 @@ export function Navbar({
       <div className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between px-3 sm:px-6 lg:px-8 gap-2">
         {/* Brand Header Left */}
         <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-          <img src="/logo.png" alt="Job Application Tracker Logo" className="h-10 w-10 sm:h-11 sm:w-11 shrink-0 object-contain drop-shadow-md" />
+          <div className="h-10 w-10 sm:h-11 sm:w-11 shrink-0 overflow-hidden rounded-full bg-white shadow-md ring-2 ring-slate-200 dark:ring-slate-700">
+            <img src="/logo.png" alt="Job Application Tracker Logo" className="h-full w-full object-cover" />
+          </div>
+
 
           <div className="hidden sm:flex flex-col justify-center">
             <h1 className="text-base lg:text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100 whitespace-nowrap">

@@ -54,7 +54,10 @@ function ResetPasswordForm() {
     <div className="w-full max-w-md space-y-7 rounded-3xl border border-slate-200 bg-white p-7 sm:p-9 shadow-2xl dark:border-slate-800 dark:bg-slate-900/90 backdrop-blur-2xl">
       {/* Brand Header */}
       <div className="text-center space-y-2">
-        <img src="/logo.png" alt="Job Tracker Logo" className="mx-auto h-24 w-24 object-contain drop-shadow-lg" />
+        <div className="mx-auto h-24 w-24 overflow-hidden rounded-full bg-white shadow-xl ring-2 ring-slate-200 dark:ring-slate-700">
+          <img src="/logo.png" alt="Job Tracker Logo" className="h-full w-full object-cover" />
+        </div>
+
 
         <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
           Reset Password
