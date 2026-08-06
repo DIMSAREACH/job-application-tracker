@@ -8,6 +8,7 @@ import { signIn } from "next-auth/react";
 import { Briefcase, Lock, Mail, User, Loader2, UserPlus, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordStrengthMeter } from "@/components/PasswordStrengthMeter";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -21,6 +22,13 @@ export default function RegisterPage() {
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  const handleGeneratePassword = (genPassword: string) => {
+    setPassword(genPassword);
+    setConfirmPassword(genPassword);
+    setShowPassword(true);
+    setShowConfirmPassword(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -147,6 +155,12 @@ export default function RegisterPage() {
                 )}
               </button>
             </div>
+
+            {/* Password Strength Meter */}
+            <PasswordStrengthMeter
+              password={password}
+              onGeneratePassword={handleGeneratePassword}
+            />
           </div>
 
           {/* Confirm Password */}

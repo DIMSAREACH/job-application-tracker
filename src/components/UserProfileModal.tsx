@@ -26,6 +26,7 @@ import {
   CheckCircle2,
   Sparkles,
 } from "lucide-react";
+import { PasswordStrengthMeter } from "@/components/PasswordStrengthMeter";
 
 interface UserProfileModalProps {
   open: boolean;
@@ -75,6 +76,13 @@ export function UserProfileModal({
       setShowConfirmPassword(false);
     }
   }, [open]);
+
+  const handleGeneratePassword = (genPassword: string) => {
+    setNewPassword(genPassword);
+    setConfirmPassword(genPassword);
+    setShowPassword(true);
+    setShowConfirmPassword(true);
+  };
 
   // Handle local image file upload & conversion to Data URL
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -317,6 +325,12 @@ export function UserProfileModal({
                 </div>
               </div>
             </div>
+
+            {/* Password Strength Meter */}
+            <PasswordStrengthMeter
+              password={newPassword}
+              onGeneratePassword={handleGeneratePassword}
+            />
 
             <DialogFooter className="pt-4 border-t border-slate-100 dark:border-slate-800/80 gap-2 sm:gap-0">
               <Button
