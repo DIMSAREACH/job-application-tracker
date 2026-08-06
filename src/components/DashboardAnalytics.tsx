@@ -217,7 +217,7 @@ export function DashboardAnalytics({ applications, onSelectApp }: DashboardAnaly
           {/* Bar Chart Viewport with Gradient Fill */}
           <div className="h-48 my-3">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={activityData} margin={{ top: 15, right: 10, left: -25, bottom: 0 }}>
+              <BarChart data={activityData} margin={{ top: 15, right: 0, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#6366f1" stopOpacity={1} />
@@ -225,7 +225,7 @@ export function DashboardAnalytics({ applications, onSelectApp }: DashboardAnaly
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="date" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "#94a3b8", fontWeight: 600 }} />
-                <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "#94a3b8", fontWeight: 600 }} domain={[0, "dataMax + 1"]} />
+                <YAxis hide={true} domain={[0, "dataMax + 1"]} />
                 <Tooltip
                   cursor={{ fill: "rgba(99, 102, 241, 0.08)", radius: 8 }}
                   formatter={(value: unknown) => [`${value} ${Number(value) === 1 ? "Application" : "Applications"}`, "Activity"]}
