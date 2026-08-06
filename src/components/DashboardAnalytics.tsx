@@ -19,10 +19,9 @@ import {
   PieChart as PieIcon,
   BarChart3,
   Activity,
-  ArrowUpRight,
   Sparkles,
-  CheckCircle2,
   Clock,
+  Briefcase,
 } from "lucide-react";
 
 interface DashboardAnalyticsProps {
@@ -62,27 +61,45 @@ export function DashboardAnalytics({ applications, onSelectApp }: DashboardAnaly
     ].filter((d) => d.value > 0);
   }, [applications]);
 
-  // Activity over recent days (Grouped by date)
+  // Robust 7-Day Activity Trend calculation with exact Year/Month/Date matching
   const activityData = useMemo(() => {
-    const daysMap: Record<string, { date: string; count: number }> = {};
+    const pastDays: { key: string; dateLabel: string; count: number }[] = [];
+    const today = new Date();
 
-    // Get past 7 days
     for (let i = 6; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const key = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-      daysMap[key] = { date: key, count: 0 };
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+
+      const year = d.getFullYear();
+      const month = d.getMonth();
+      const dateNum = d.getDate();
+
+      const key = `${year}-${month}-${dateNum}`;
+      const dateLabel = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+      pastDays.push({ key, dateLabel, count: 0 });
     }
 
     applications.forEach((app) => {
-      const appDate = new Date(app.dateApplied || app.createdAt);
-      const key = appDate.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-      if (daysMap[key]) {
-        daysMap[key].count++;
+      if (!app) return;
+      const rawDate = app.dateApplied ? new Date(app.dateApplied) : new Date(app.createdAt);
+      if (isNaN(rawDate.getTime())) return;
+
+      const year = rawDate.getFullYear();
+      const month = rawDate.getMonth();
+      const dateNum = rawDate.getDate();
+      const appKey = `${year}-${month}-${dateNum}`;
+
+      const found = pastDays.find((p) => p.key === appKey);
+      if (found) {
+        found.count++;
       }
     });
 
-    return Object.values(daysMap);
+    return pastDays.map((p) => ({
+      date: p.dateLabel,
+      count: p.count,
+    }));
   }, [applications]);
 
   // Conversion Metrics
@@ -114,7 +131,7 @@ export function DashboardAnalytics({ applications, onSelectApp }: DashboardAnaly
               </div>
               <h3 className="text-base font-bold text-slate-900 dark:text-white">Status Breakdown</h3>
             </div>
-            <span className="text-xs font-semibold text-slate-400">{total} Total</span>
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{total} Total</span>
           </div>
 
           {/* Donut Chart Viewport */}
@@ -137,9 +154,9 @@ export function DashboardAnalytics({ applications, onSelectApp }: DashboardAnaly
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "rgba(15, 23, 42, 0.9)",
-                      borderColor: "rgba(51, 65, 85, 0.5)",
-                      borderRadius: "12px",
+                      backgroundColor: "rgba(15, 23, 42, 0.95)",
+                      borderColor: "rgba(99, 102, 241, 0.3)",
+                      borderRadius: "14px",
                       color: "#fff",
                       fontSize: "12px",
                       fontWeight: "bold",
@@ -198,25 +215,33 @@ export function DashboardAnalytics({ applications, onSelectApp }: DashboardAnaly
             </span>
           </div>
 
-          {/* Bar Chart Viewport */}
+          {/* Bar Chart Viewport with Gradient Fill */}
           <div className="h-48 my-3">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={activityData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+              <BarChart data={activityData} margin={{ top: 15, right: 10, left: -25, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#6366f1" stopOpacity={1} />
+                    <stop offset="100%" stopColor="#a855f7" stopOpacity={0.75} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148, 163, 184, 0.15)" />
-                <XAxis dataKey="date" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "#94a3b8" }} />
-                <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "#94a3b8" }} />
+                <XAxis dataKey="date" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "#94a3b8", fontWeight: 600 }} />
+                <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "#94a3b8", fontWeight: 600 }} domain={[0, "dataMax + 1"]} />
                 <Tooltip
-                  cursor={{ fill: "rgba(99, 102, 241, 0.05)" }}
+                  cursor={{ fill: "rgba(99, 102, 241, 0.08)", radius: 8 }}
+                  formatter={(value: unknown) => [`${value} ${Number(value) === 1 ? "Application" : "Applications"}`, "Activity"]}
                   contentStyle={{
-                    backgroundColor: "rgba(15, 23, 42, 0.9)",
-                    borderColor: "rgba(51, 65, 85, 0.5)",
-                    borderRadius: "12px",
+                    backgroundColor: "rgba(15, 23, 42, 0.95)",
+                    borderColor: "rgba(99, 102, 241, 0.3)",
+                    borderRadius: "14px",
                     color: "#fff",
                     fontSize: "12px",
                     fontWeight: "bold",
+                    boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.3)",
                   }}
                 />
-                <Bar dataKey="count" fill="#818cf8" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="count" fill="url(#barGradient)" radius={[8, 8, 2, 2]} maxBarSize={32} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -235,7 +260,7 @@ export function DashboardAnalytics({ applications, onSelectApp }: DashboardAnaly
         </div>
       </div>
 
-      {/* ── Recent Activity / Applications Stream Widget ── */}
+      {/* ── Recent Activity Stream Widget ── */}
       <div className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-md shadow-slate-200/40 dark:border-slate-800 dark:bg-slate-950/90 dark:shadow-2xl flex flex-col justify-between">
         <div>
           <div className="flex items-center justify-between mb-4">
@@ -245,7 +270,7 @@ export function DashboardAnalytics({ applications, onSelectApp }: DashboardAnaly
               </div>
               <h3 className="text-base font-bold text-slate-900 dark:text-white">Recent Pipeline Activity</h3>
             </div>
-            <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">{activeCount} Active</span>
+            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{activeCount} Active</span>
           </div>
 
           {/* Activity Feed */}
