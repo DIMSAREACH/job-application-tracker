@@ -9,6 +9,8 @@ import { Lock, Mail, User, Loader2, UserPlus, Eye, EyeOff, CheckCircle2, Trendin
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordStrengthMeter } from "@/components/PasswordStrengthMeter";
+import { ThemeToggle } from "@/components/ThemeToggle";
+
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -57,7 +59,12 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white">
+    <div className="relative flex min-h-screen text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white">
+
+      {/* ── Theme Toggle — top right ── */}
+      <div className="absolute top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
 
       {/* ── Left Panel: Background Image ── */}
       <div

@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { Lock, Mail, Loader2, LogIn, Eye, EyeOff, Briefcase, TrendingUp, CheckCircle2 } from "lucide-react";
+import { Lock, Mail, Loader2, LogIn, Eye, EyeOff, CheckCircle2, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -38,7 +39,12 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white">
+    <div className="relative flex min-h-screen text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white">
+
+      {/* ── Theme Toggle — fixed top right ── */}
+      <div className="absolute top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
 
       {/* ── Left Panel: Background Image with overlay ── */}
       <div
