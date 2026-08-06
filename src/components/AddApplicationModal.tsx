@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createApplicationAction } from "@/actions/application-actions";
 import { CustomStageSelect, ApplicationStage } from "@/components/CustomStageSelect";
+import { TagSelectDropdown } from "@/components/TagSelectDropdown";
 import { Mic, Loader2, Check, Tag } from "lucide-react";
 
 const FormSchema = z.object({
@@ -188,13 +189,15 @@ export function AddApplicationModal({
             <div>
               <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1">
                 <Tag className="h-3 w-3 text-indigo-500" />
-                <span>Tags / Labels (comma-separated)</span>
+                <span>Tags / Labels</span>
               </label>
-              <Input
-                {...register("tags")}
-                placeholder="Remote, Referral, Full-time..."
-                className="mt-1.5 rounded-xl border-slate-200 bg-slate-50/50 text-sm font-medium text-slate-900 focus:bg-white dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100 focus-visible:ring-indigo-500"
-              />
+              <div className="mt-1.5">
+                <TagSelectDropdown
+                  value={watch("tags") || ""}
+                  onChange={(val) => setValue("tags", val)}
+                  placeholder="Remote, Referral, Full-time..."
+                />
+              </div>
             </div>
           </div>
 
