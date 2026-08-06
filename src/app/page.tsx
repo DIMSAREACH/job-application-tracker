@@ -161,10 +161,10 @@ export default function DashboardPage() {
           <div className="pointer-events-none absolute -top-16 -right-16 h-64 w-64 rounded-full bg-indigo-400/10 blur-3xl dark:bg-indigo-500/10" />
           <div className="pointer-events-none absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-purple-400/10 blur-2xl dark:bg-purple-500/10" />
 
-          <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 p-6 sm:p-7" suppressHydrationWarning>
+          <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 p-6 sm:p-7">
 
             {/* Left — greeting & meta */}
-            <div className="flex items-center gap-4 min-w-0" suppressHydrationWarning>
+            <div className="flex items-center gap-4 min-w-0">
               {/* Pulse dot */}
               <div className="hidden sm:flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md shadow-indigo-500/30">
                 <Sparkles className="h-5 w-5 text-white" />

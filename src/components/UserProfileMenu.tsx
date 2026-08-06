@@ -52,6 +52,7 @@ export function UserProfileMenu({
           onClick={() => setOpen(!open)}
           className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-slate-900 p-0.5 shadow-md border-2 border-indigo-500/30 hover:border-indigo-500 dark:border-indigo-400/30 dark:hover:border-indigo-400 hover:scale-105 transition-all cursor-pointer shrink-0"
           title={`${displayName} (Online) - Profile & Settings`}
+          suppressHydrationWarning
         >
           <div className="flex h-full w-full overflow-hidden items-center justify-center rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-xs font-bold text-white shadow-inner" suppressHydrationWarning>
             {userImage ? (
