@@ -18,7 +18,8 @@ import { EditApplicationModal } from "@/components/EditApplicationModal";
 import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
 import { CsvImportModal } from "@/components/CsvImportModal";
 import { ApplicationHistoryModal } from "@/components/ApplicationHistoryModal";
-import { Loader2, Plus, Sparkles, Download, Upload, RefreshCw, Radio } from "lucide-react";
+import { Loader2, Plus, Sparkles, Download, Upload, RefreshCw } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { exportApplicationsToCSV } from "@/lib/csv-utils";
 
@@ -154,68 +155,84 @@ export default function DashboardPage() {
 
       {/* Main Container */}
       <main className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Top Header Banner */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-3xl border border-indigo-200/80 bg-gradient-to-r from-indigo-100/70 via-purple-50/60 to-slate-100 p-6 sm:p-8 shadow-sm dark:border-indigo-500/20 dark:from-indigo-950/40 dark:via-purple-950/20 dark:to-slate-900/60 dark:shadow-lg backdrop-blur-xl transition-all">
-          <div>
-            <div className="flex items-center gap-2.5">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-widest">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Job Search Command Center</span>
+        {/* ── Hero Banner ── */}
+        <div className="relative overflow-hidden rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-sm dark:border-slate-800/60 dark:bg-slate-900/60 transition-all">
+          {/* Subtle gradient blob */}
+          <div className="pointer-events-none absolute -top-16 -right-16 h-64 w-64 rounded-full bg-indigo-400/10 blur-3xl dark:bg-indigo-500/10" />
+          <div className="pointer-events-none absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-purple-400/10 blur-2xl dark:bg-purple-500/10" />
+
+          <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 p-6 sm:p-7">
+
+            {/* Left — greeting & meta */}
+            <div className="flex items-center gap-4 min-w-0">
+              {/* Pulse dot */}
+              <div className="hidden sm:flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md shadow-indigo-500/30">
+                <Sparkles className="h-5 w-5 text-white" />
               </div>
-              <div className="h-3 w-[1px] bg-slate-300 dark:bg-slate-700 hidden sm:block" />
-              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                <Radio className="h-3 w-3 text-emerald-500 animate-pulse" />
-                <span>Auto-Sync Active</span>
-              </span>
+
+              <div className="min-w-0">
+                {/* Status pill */}
+                <div className="mb-1.5 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 dark:border-emerald-500/20 dark:bg-emerald-500/10">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+                  <span className="text-[11px] font-semibold tracking-wide text-emerald-700 dark:text-emerald-400">Auto-Sync Active</span>
+                </div>
+
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white truncate">
+                  {currentUserName ? (
+                    <>Welcome back, <span className="text-indigo-600 dark:text-indigo-400">{currentUserName}</span> 👋</>
+                  ) : (
+                    "Your Application Pipeline"
+                  )}
+                </h2>
+                <p className="mt-0.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Track applications, monitor interviews, manage your career pipeline.
+                </p>
+              </div>
             </div>
-            <h2 className="mt-1.5 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-              {currentUserName ? `Welcome back, ${currentUserName}` : "Track your application pipeline"}
-            </h2>
-            <p className="mt-1 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">
-              Log submissions, monitor interview progress, export/import CSVs, and inspect activity history logs.
-            </p>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-2 self-start sm:self-center">
-            {/* Instant Manual Refresh */}
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => fetchApplications(false)}
-              disabled={refreshing}
-              title={lastSynced ? `Last synced: ${lastSynced.toLocaleTimeString("en-GB")}` : "Refresh"}
-              suppressHydrationWarning
-              className="h-10 w-10 rounded-xl border-slate-300 bg-white/80 dark:bg-slate-900/80 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-900 transition-all"
-            >
-              <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin text-indigo-600" : ""}`} />
-            </Button>
+            {/* Right — action buttons */}
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              {/* Refresh */}
+              <button
+                onClick={() => fetchApplications(false)}
+                disabled={refreshing}
+                title={lastSynced ? `Last synced: ${lastSynced.toLocaleTimeString("en-GB")}` : "Refresh"}
+                suppressHydrationWarning
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 shadow-sm hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-indigo-500 dark:hover:text-indigo-400 transition-all disabled:opacity-50"
+              >
+                <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin text-indigo-600" : ""}`} />
+              </button>
 
-            <Button
-              variant="outline"
-              onClick={() => setImportModalOpen(true)}
-              className="gap-1.5 rounded-xl border-slate-300 bg-white/80 dark:bg-slate-900/80 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200"
-            >
-              <Upload className="h-4 w-4" />
-              <span>Import CSV</span>
-            </Button>
+              {/* Divider */}
+              <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block" />
 
-            <Button
-              variant="outline"
-              onClick={() => exportApplicationsToCSV(optimisticApps)}
-              className="gap-1.5 rounded-xl border-slate-300 bg-white/80 dark:bg-slate-900/80 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200"
-            >
-              <Download className="h-4 w-4" />
-              <span>Export CSV</span>
-            </Button>
+              {/* Import CSV */}
+              <button
+                onClick={() => setImportModalOpen(true)}
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-indigo-500 dark:hover:text-indigo-400 transition-all"
+              >
+                <Upload className="h-3.5 w-3.5" />
+                Import CSV
+              </button>
 
-            <Button
-              onClick={() => setAddModalOpen(true)}
-              size="lg"
-              className="gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-md shadow-indigo-500/20 hover:from-indigo-500 hover:to-purple-500 rounded-xl transition-all hover:scale-[1.02]"
-            >
-              <Plus className="h-5 w-5" />
-              Add Application
-            </Button>
+              {/* Export CSV */}
+              <button
+                onClick={() => exportApplicationsToCSV(optimisticApps)}
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-indigo-500 dark:hover:text-indigo-400 transition-all"
+              >
+                <Download className="h-3.5 w-3.5" />
+                Export CSV
+              </button>
+
+              {/* Add Application — primary CTA */}
+              <button
+                onClick={() => setAddModalOpen(true)}
+                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-indigo-500/25 hover:from-indigo-500 hover:to-purple-500 hover:shadow-indigo-500/40 hover:scale-[1.03] active:scale-[0.98] transition-all"
+              >
+                <Plus className="h-4 w-4" />
+                Add Application
+              </button>
+            </div>
           </div>
         </div>
 
