@@ -8,6 +8,7 @@ import {
   updateApplicationStatusAction,
   toggleInterviewedAction,
 } from "@/actions/application-actions";
+import { getCurrentUserProfileAction } from "@/actions/auth-actions";
 import { Navbar } from "@/components/Navbar";
 import { DashboardSummary } from "@/components/DashboardSummary";
 import { KanbanBoard } from "@/components/KanbanBoard";
@@ -26,6 +27,7 @@ type ApplicationWithActivities = Application & { activities?: ApplicationActivit
 export default function DashboardPage() {
   const { data: session } = useSession();
   const [applications, setApplications] = useState<ApplicationWithActivities[]>([]);
+  const [userProfile, setUserProfile] = useState<{ name?: string | null; email?: string | null; image?: string | null } | null>(null);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<"kanban" | "table">("kanban");
 
@@ -74,8 +76,16 @@ export default function DashboardPage() {
     setLoading(false);
   };
 
+  const fetchUserProfile = async () => {
+    const res = await getCurrentUserProfileAction();
+    if (res.success && res.data) {
+      setUserProfile(res.data);
+    }
+  };
+
   useEffect(() => {
     fetchApplications();
+    fetchUserProfile();
   }, []);
 
   // Handlers
@@ -102,6 +112,10 @@ export default function DashboardPage() {
     }
   };
 
+  const currentUserName = userProfile?.name || session?.user?.name;
+  const currentUserEmail = userProfile?.email || session?.user?.email;
+  const currentUserImage = userProfile?.image || session?.user?.image;
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 selection:bg-indigo-500 selection:text-white transition-colors duration-300">
       {/* Header Navigation */}
@@ -110,8 +124,10 @@ export default function DashboardPage() {
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         totalApps={optimisticApps.length}
-        userName={session?.user?.name}
-        userEmail={session?.user?.email}
+        userName={currentUserName}
+        userEmail={currentUserEmail}
+        userImage={currentUserImage}
+        onProfileUpdated={fetchUserProfile}
       />
 
       {/* Main Container */}
@@ -124,7 +140,7 @@ export default function DashboardPage() {
               <span>Job Search Command Center</span>
             </div>
             <h2 className="mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-              {session?.user?.name ? `Welcome back, ${session.user.name}` : "Track your application pipeline"}
+              {currentUserName ? `Welcome back, ${currentUserName}` : "Track your application pipeline"}
             </h2>
             <p className="mt-1 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">
               Log submissions, monitor interview progress, export/import CSVs, and inspect activity history logs.

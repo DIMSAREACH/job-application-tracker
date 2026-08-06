@@ -13,6 +13,8 @@ interface NavbarProps {
   totalApps: number;
   userName?: string | null;
   userEmail?: string | null;
+  userImage?: string | null;
+  onProfileUpdated?: () => void;
 }
 
 export function Navbar({
@@ -22,6 +24,8 @@ export function Navbar({
   totalApps,
   userName,
   userEmail,
+  userImage,
+  onProfileUpdated,
 }: NavbarProps) {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/95 transition-colors duration-300 shadow-sm">
@@ -85,7 +89,12 @@ export function Navbar({
           <ThemeToggle />
 
           {/* User Profile Avatar Dropdown */}
-          <UserProfileMenu userName={userName} userEmail={userEmail} />
+          <UserProfileMenu
+            userName={userName}
+            userEmail={userEmail}
+            userImage={userImage}
+            onProfileUpdated={onProfileUpdated}
+          />
         </div>
       </div>
     </header>
