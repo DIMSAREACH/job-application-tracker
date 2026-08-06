@@ -9,7 +9,7 @@ import {
   toggleInterviewedAction,
 } from "@/actions/application-actions";
 import { getCurrentUserProfileAction } from "@/actions/auth-actions";
-import { Navbar } from "@/components/Navbar";
+import { Sidebar } from "@/components/Sidebar";
 import { DashboardSummary } from "@/components/DashboardSummary";
 import { DashboardAnalytics } from "@/components/DashboardAnalytics";
 import { KanbanBoard } from "@/components/KanbanBoard";
@@ -19,6 +19,7 @@ import { EditApplicationModal } from "@/components/EditApplicationModal";
 import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
 import { CsvImportModal } from "@/components/CsvImportModal";
 import { ApplicationHistoryModal } from "@/components/ApplicationHistoryModal";
+import { UserProfileModal } from "@/components/UserProfileModal";
 import { Loader2, Plus, Sparkles, Download, Upload, RefreshCw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -41,6 +42,7 @@ export default function DashboardPage() {
   const [editingApp, setEditingApp] = useState<Application | null>(null);
   const [historyApp, setHistoryApp] = useState<ApplicationWithActivities | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
 
   const [, startTransition] = useTransition();
 
@@ -142,20 +144,26 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 selection:bg-indigo-500 selection:text-white transition-colors duration-300">
-      {/* Header Navigation */}
-      <Navbar
-        onOpenAddModal={() => setAddModalOpen(true)}
+      {/* ── Sidebar Navigation (Collapsible Desktop + Mobile Drawer) ── */}
+      <Sidebar
         viewMode={viewMode}
         onViewModeChange={setViewMode}
+        onOpenAddModal={() => setAddModalOpen(true)}
+        onOpenImportModal={() => setImportModalOpen(true)}
+        onOpenHistoryModal={() => {
+          if (optimisticApps.length > 0) setHistoryApp(optimisticApps[0]);
+        }}
+        onExportCSV={() => exportApplicationsToCSV(optimisticApps)}
+        onOpenProfileModal={() => setProfileModalOpen(true)}
         totalApps={optimisticApps.length}
         userName={currentUserName}
         userEmail={currentUserEmail}
         userImage={currentUserImage}
-        onProfileUpdated={fetchUserProfile}
       />
 
-      {/* Main Container */}
-      <main className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      {/* ── Main Content Area ── */}
+      <div className="lg:pl-64 flex flex-col min-h-screen transition-all duration-300">
+        <main className="flex-1 mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8 py-6 space-y-8">
         {/* ── Hero Banner Card ── */}
         <div className="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-gradient-to-r from-white via-indigo-50/30 to-purple-50/40 p-5 sm:p-7 shadow-lg shadow-indigo-500/5 dark:border-slate-800 dark:from-slate-900 dark:via-slate-900/95 dark:to-indigo-950/40 dark:shadow-2xl transition-all" suppressHydrationWarning>
           {/* Glowing background ambient mesh */}
@@ -305,7 +313,8 @@ export default function DashboardPage() {
             onViewHistory={(app) => setHistoryApp(app)}
           />
         )}
-      </main>
+        </main>
+      </div>
 
       {/* Modals */}
       <AddApplicationModal
@@ -338,6 +347,12 @@ export default function DashboardPage() {
         open={Boolean(deletingId)}
         onOpenChange={(open) => !open && setDeletingId(null)}
         onSuccess={fetchApplications}
+      />
+
+      <UserProfileModal
+        open={profileModalOpen}
+        onOpenChange={setProfileModalOpen}
+        onProfileUpdated={fetchUserProfile}
       />
     </div>
   );
