@@ -77,13 +77,6 @@ export function UserProfileModal({
     }
   }, [open]);
 
-  const handleGeneratePassword = (genPassword: string) => {
-    setNewPassword(genPassword);
-    setConfirmPassword(genPassword);
-    setShowPassword(true);
-    setShowConfirmPassword(true);
-  };
-
   // Handle local image file upload & conversion to Data URL
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -327,10 +320,7 @@ export function UserProfileModal({
             </div>
 
             {/* Password Strength Meter */}
-            <PasswordStrengthMeter
-              password={newPassword}
-              onGeneratePassword={handleGeneratePassword}
-            />
+            <PasswordStrengthMeter password={newPassword} />
 
             <DialogFooter className="pt-4 border-t border-slate-100 dark:border-slate-800/80 gap-2 sm:gap-0">
               <Button

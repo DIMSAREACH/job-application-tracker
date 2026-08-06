@@ -23,13 +23,6 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const handleGeneratePassword = (genPassword: string) => {
-    setPassword(genPassword);
-    setConfirmPassword(genPassword);
-    setShowPassword(true);
-    setShowConfirmPassword(true);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -157,10 +150,7 @@ export default function RegisterPage() {
             </div>
 
             {/* Password Strength Meter */}
-            <PasswordStrengthMeter
-              password={password}
-              onGeneratePassword={handleGeneratePassword}
-            />
+            <PasswordStrengthMeter password={password} />
           </div>
 
           {/* Confirm Password */}
