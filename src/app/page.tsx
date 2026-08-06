@@ -18,7 +18,7 @@ import { EditApplicationModal } from "@/components/EditApplicationModal";
 import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
 import { CsvImportModal } from "@/components/CsvImportModal";
 import { ApplicationHistoryModal } from "@/components/ApplicationHistoryModal";
-import { Loader2, Plus, Sparkles, Download, Upload } from "lucide-react";
+import { Loader2, Plus, Sparkles, Download, Upload, RefreshCw, Radio } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { exportApplicationsToCSV } from "@/lib/csv-utils";
 
@@ -29,6 +29,8 @@ export default function DashboardPage() {
   const [applications, setApplications] = useState<ApplicationWithActivities[]>([]);
   const [userProfile, setUserProfile] = useState<{ name?: string | null; email?: string | null; image?: string | null } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [lastSynced, setLastSynced] = useState<Date>(new Date());
   const [viewMode, setViewMode] = useState<"kanban" | "table">("kanban");
 
   // Modal States
@@ -67,13 +69,17 @@ export default function DashboardPage() {
     }
   );
 
-  const fetchApplications = async (showLoading = false) => {
+  const fetchApplications = async (showLoading = true) => {
     if (showLoading) setLoading(true);
+    else setRefreshing(true);
+
     const res = await getApplicationsAction();
     if (res.success && res.data) {
       setApplications(res.data as ApplicationWithActivities[]);
+      setLastSynced(new Date());
     }
     if (showLoading) setLoading(false);
+    else setRefreshing(false);
   };
 
   const fetchUserProfile = async () => {
@@ -87,12 +93,16 @@ export default function DashboardPage() {
     fetchApplications(true);
     fetchUserProfile();
 
-    // Auto-refresh when tab becomes active / focused
-    const handleFocus = () => fetchApplications(false);
+    // Auto-refresh when tab gains focus
+    const handleFocus = () => {
+      fetchApplications(false);
+    };
     window.addEventListener("focus", handleFocus);
 
-    // Periodic silent background auto-refresh every 30s
-    const interval = setInterval(() => fetchApplications(false), 30000);
+    // Auto-refresh silently every 30 seconds
+    const interval = setInterval(() => {
+      fetchApplications(false);
+    }, 30000);
 
     return () => {
       window.removeEventListener("focus", handleFocus);
@@ -100,7 +110,7 @@ export default function DashboardPage() {
     };
   }, []);
 
-  // Handlers with smooth optimistic updates and silent revalidation
+  // Handlers
   const handleStatusChange = async (
     id: string,
     newStatus: "APPLIED" | "INTERVIEWING" | "OFFER" | "REJECTED"
@@ -145,13 +155,20 @@ export default function DashboardPage() {
       {/* Main Container */}
       <main className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Top Header Banner */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-3xl border border-indigo-200/80 bg-gradient-to-r from-indigo-100/70 via-purple-50/60 to-slate-100 p-6 sm:p-8 shadow-sm dark:border-indigo-500/20 dark:from-indigo-950/40 dark:via-purple-950/20 dark:to-slate-900/60 dark:shadow-lg backdrop-blur-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-3xl border border-indigo-200/80 bg-gradient-to-r from-indigo-100/70 via-purple-50/60 to-slate-100 p-6 sm:p-8 shadow-sm dark:border-indigo-500/20 dark:from-indigo-950/40 dark:via-purple-950/20 dark:to-slate-900/60 dark:shadow-lg backdrop-blur-xl transition-all">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-indigo-700 dark:text-indigo-400 uppercase tracking-widest">
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>Job Search Command Center</span>
+            <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-widest">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>Job Search Command Center</span>
+              </div>
+              <div className="h-3 w-[1px] bg-slate-300 dark:bg-slate-700 hidden sm:block" />
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                <Radio className="h-3 w-3 text-emerald-500 animate-pulse" />
+                <span>Auto-Sync Active</span>
+              </span>
             </div>
-            <h2 className="mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <h2 className="mt-1.5 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
               {currentUserName ? `Welcome back, ${currentUserName}` : "Track your application pipeline"}
             </h2>
             <p className="mt-1 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">
@@ -160,6 +177,18 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2 self-start sm:self-center">
+            {/* Instant Manual Refresh */}
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => fetchApplications(false)}
+              disabled={refreshing}
+              title={`Last synced: ${lastSynced.toLocaleTimeString()}`}
+              className="h-10 w-10 rounded-xl border-slate-300 bg-white/80 dark:bg-slate-900/80 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-900 transition-all"
+            >
+              <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin text-indigo-600" : ""}`} />
+            </Button>
+
             <Button
               variant="outline"
               onClick={() => setImportModalOpen(true)}
@@ -181,13 +210,14 @@ export default function DashboardPage() {
             <Button
               onClick={() => setAddModalOpen(true)}
               size="lg"
-              className="gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-md shadow-indigo-500/20 hover:from-indigo-500 hover:to-purple-500 rounded-xl"
+              className="gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-md shadow-indigo-500/20 hover:from-indigo-500 hover:to-purple-500 rounded-xl transition-all hover:scale-[1.02]"
             >
               <Plus className="h-5 w-5" />
               Add Application
             </Button>
           </div>
         </div>
+
 
         {/* Dashboard Summary Cards */}
         <DashboardSummary applications={optimisticApps} />
@@ -252,20 +282,20 @@ export default function DashboardPage() {
       <AddApplicationModal
         open={addModalOpen}
         onOpenChange={setAddModalOpen}
-        onSuccess={() => fetchApplications(false)}
+        onSuccess={fetchApplications}
       />
 
       <CsvImportModal
         open={importModalOpen}
         onOpenChange={setImportModalOpen}
-        onSuccess={() => fetchApplications(false)}
+        onSuccess={fetchApplications}
       />
 
       <EditApplicationModal
         application={editingApp}
         open={Boolean(editingApp)}
         onOpenChange={(open) => !open && setEditingApp(null)}
-        onSuccess={() => fetchApplications(false)}
+        onSuccess={fetchApplications}
       />
 
       <ApplicationHistoryModal
@@ -278,9 +308,8 @@ export default function DashboardPage() {
         id={deletingId}
         open={Boolean(deletingId)}
         onOpenChange={(open) => !open && setDeletingId(null)}
-        onSuccess={() => fetchApplications(false)}
+        onSuccess={fetchApplications}
       />
     </div>
-
   );
 }
