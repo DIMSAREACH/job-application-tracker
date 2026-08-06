@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { Briefcase, Lock, Mail, Loader2, LogIn, ArrowRight, Sparkles } from "lucide-react";
+import { Briefcase, Lock, Mail, Loader2, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -36,26 +36,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleQuickDemoLogin = async () => {
-    setLoading(true);
-    setErrorMsg("");
-
-    const res = await signIn("credentials", {
-      email: "demo@example.com",
-      password: "password123",
-      redirect: false,
-    });
-
-    setLoading(false);
-
-    if (res?.error) {
-      setErrorMsg("Failed to sign in with demo account.");
-    } else {
-      router.push("/");
-      router.refresh();
-    }
-  };
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 px-4 py-12 text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white transition-colors duration-300">
       <div className="w-full max-w-md space-y-7 rounded-3xl border border-slate-200 bg-white p-7 sm:p-9 shadow-2xl dark:border-slate-800 dark:bg-slate-900/90 backdrop-blur-2xl">
@@ -72,41 +52,8 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Demo Quick Sign In */}
-        <div className="rounded-2xl border border-indigo-200/90 bg-indigo-50/80 p-4 dark:border-indigo-500/40 dark:bg-indigo-950/70 shadow-sm transition-all">
-          <div className="flex items-center justify-between gap-3">
-            <div className="space-y-0.5">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-950 dark:text-indigo-200">
-                <Sparkles className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
-                <span>Quick Demo Account</span>
-              </div>
-              <p className="text-xs font-semibold text-slate-700 dark:text-slate-200">
-                demo@example.com <span className="text-slate-500 dark:text-slate-400 font-normal">(password123)</span>
-              </p>
-            </div>
-            <Button
-              type="button"
-              onClick={handleQuickDemoLogin}
-              disabled={loading}
-              size="sm"
-              className="gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 font-semibold text-white shadow-md shadow-indigo-500/25 hover:from-indigo-500 hover:to-purple-500 shrink-0 px-3.5"
-            >
-              <span>Instant Demo</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Button>
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div className="relative flex items-center justify-center">
-          <div className="w-full border-t border-slate-200 dark:border-slate-800" />
-          <span className="absolute bg-white dark:bg-slate-900 px-3 text-[11px] font-bold text-slate-500 dark:text-slate-300 uppercase tracking-wider">
-            Or sign in with email
-          </span>
-        </div>
-
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
           {errorMsg && (
             <div className="rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs font-semibold text-rose-700 dark:bg-rose-500/10 dark:border-rose-500/20 dark:text-rose-400">
               {errorMsg}
