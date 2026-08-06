@@ -11,6 +11,7 @@ import {
 import { getCurrentUserProfileAction } from "@/actions/auth-actions";
 import { Navbar } from "@/components/Navbar";
 import { DashboardSummary } from "@/components/DashboardSummary";
+import { DashboardAnalytics } from "@/components/DashboardAnalytics";
 import { KanbanBoard } from "@/components/KanbanBoard";
 import { DataTable } from "@/components/DataTable";
 import { AddApplicationModal } from "@/components/AddApplicationModal";
@@ -246,6 +247,9 @@ export default function DashboardPage() {
 
         {/* Dashboard Summary Cards */}
         <DashboardSummary applications={optimisticApps} />
+
+        {/* Dashboard Analytics & Visualizations */}
+        <DashboardAnalytics applications={optimisticApps} onSelectApp={setEditingApp} />
 
         {/* Core View (Kanban / Table) */}
         {loading && optimisticApps.length === 0 ? (
