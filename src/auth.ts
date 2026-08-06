@@ -40,7 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: user.id,
           name: user.name,
           email: user.email,
-          image: user.image,
+          image: null, // Keep JWT cookie tiny to prevent HTTP 494 Request Header Too Large
         };
       },
     }),

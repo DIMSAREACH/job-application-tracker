@@ -44,7 +44,7 @@ interface CropArea {
 async function getCroppedDataUrl(
   imageSrc: string,
   cropArea: CropArea,
-  outputSize = 320
+  outputSize = 160
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     const image = new Image();
@@ -65,7 +65,7 @@ async function getCroppedDataUrl(
         outputSize,
         outputSize
       );
-      resolve(canvas.toDataURL("image/jpeg", 0.85));
+      resolve(canvas.toDataURL("image/jpeg", 0.7));
     };
     image.onerror = reject;
   });
