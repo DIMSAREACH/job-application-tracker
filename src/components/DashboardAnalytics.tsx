@@ -134,10 +134,10 @@ export function DashboardAnalytics({ applications, onSelectApp }: DashboardAnaly
           </div>
 
           {/* Donut Chart Viewport */}
-          <div className="relative h-48 my-3">
+          <div className="relative h-48 my-3 outline-none focus:outline-none [&_*]:outline-none [&_*]:focus:outline-none [&_*]:ring-0">
             {statusData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+                <PieChart style={{ outline: "none" }}>
                   <Pie
                     data={statusData}
                     cx="50%"
@@ -215,9 +215,9 @@ export function DashboardAnalytics({ applications, onSelectApp }: DashboardAnaly
           </div>
 
           {/* Bar Chart Viewport with Gradient Fill */}
-          <div className="h-48 my-3">
+          <div className="h-48 my-3 outline-none focus:outline-none [&_*]:outline-none [&_*]:focus:outline-none [&_*]:ring-0">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={activityData} margin={{ top: 15, right: 0, left: 0, bottom: 0 }}>
+              <BarChart data={activityData} margin={{ top: 15, right: 0, left: 0, bottom: 0 }} style={{ outline: "none" }}>
                 <defs>
                   <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#6366f1" stopOpacity={1} />
