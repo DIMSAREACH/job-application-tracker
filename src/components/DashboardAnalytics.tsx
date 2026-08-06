@@ -12,7 +12,6 @@ import {
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
 } from "recharts";
 import {
   TrendingUp,
@@ -225,7 +224,6 @@ export function DashboardAnalytics({ applications, onSelectApp }: DashboardAnaly
                     <stop offset="100%" stopColor="#a855f7" stopOpacity={0.75} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148, 163, 184, 0.15)" />
                 <XAxis dataKey="date" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "#94a3b8", fontWeight: 600 }} />
                 <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "#94a3b8", fontWeight: 600 }} domain={[0, "dataMax + 1"]} />
                 <Tooltip
