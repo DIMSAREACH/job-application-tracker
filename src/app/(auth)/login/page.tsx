@@ -49,21 +49,22 @@ export default function LoginPage() {
           backgroundPosition: "center",
         }}
       >
-        {/* Dark gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/80 via-slate-900/70 to-blue-900/80" />
+        {/* Dark gradient overlay — lighter so image shows through */}
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/50 via-slate-900/40 to-blue-950/55" />
+
 
         {/* Floating glassmorphism card */}
         <div className="relative z-10 flex flex-col items-center text-center px-12 max-w-xl">
           <div className="mb-6 h-28 w-28 overflow-hidden rounded-full bg-white/10 shadow-2xl ring-4 ring-white/20 backdrop-blur-sm">
             <img src="/logo.png" alt="Job Tracker" className="h-full w-full object-cover" />
           </div>
-          <h1 className="text-4xl xl:text-5xl font-bold text-white tracking-tight leading-tight">
+          <h1 className="text-4xl xl:text-5xl font-bold text-white tracking-tight leading-tight drop-shadow-lg">
             Job Application<br />
-            <span className="bg-gradient-to-r from-blue-300 to-indigo-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-200 to-indigo-200 bg-clip-text text-transparent">
               Command Center
             </span>
           </h1>
-          <p className="mt-4 text-base text-slate-300 leading-relaxed">
+          <p className="mt-4 text-base text-slate-200 leading-relaxed drop-shadow-md">
             Manage Your Career. Plan Your Path. Track every application from first contact to offer.
           </p>
 
