@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { Briefcase, Plus, LayoutGrid, Table } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -30,12 +31,11 @@ export function Navbar({
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/95 transition-colors duration-300 shadow-sm">
       <div className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between px-3 sm:px-6 lg:px-8 gap-2">
-        {/* Brand Header Left */}
-        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        {/* Brand Header Left — Link to Default Home Page */}
+        <Link href="/" className="flex items-center gap-2.5 sm:gap-3 shrink-0 hover:opacity-90 transition-opacity cursor-pointer">
           <div className="h-10 w-10 sm:h-11 sm:w-11 shrink-0 overflow-hidden rounded-full bg-white shadow-md ring-2 ring-slate-200 dark:ring-slate-700">
             <img src="/logo.png" alt="Job Application Tracker Logo" className="h-full w-full object-cover" />
           </div>
-
 
           <div className="hidden sm:flex flex-col justify-center">
             <h1 className="text-base lg:text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100 whitespace-nowrap">
@@ -45,7 +45,7 @@ export function Navbar({
               {totalApps} {totalApps === 1 ? "application" : "applications"} tracked
             </p>
           </div>
-        </div>
+        </Link>
 
         {/* Action Toolbar Right */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">

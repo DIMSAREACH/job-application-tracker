@@ -62,9 +62,9 @@ export default function LoginPage() {
 
         {/* Floating glassmorphism card */}
         <div className="relative z-10 flex flex-col items-center text-center px-12 max-w-xl">
-          <div className="mb-6 h-28 w-28 overflow-hidden rounded-full bg-white/10 shadow-2xl ring-4 ring-white/20 backdrop-blur-sm">
+          <Link href="/" title="Go to Home" className="mb-6 h-28 w-28 overflow-hidden rounded-full bg-white/10 shadow-2xl ring-4 ring-white/20 backdrop-blur-sm hover:scale-105 transition-transform cursor-pointer">
             <img src="/logo.png" alt="Job Tracker" className="h-full w-full object-cover" />
-          </div>
+          </Link>
           <h1 className="text-4xl xl:text-5xl font-bold text-white tracking-tight leading-tight drop-shadow-lg">
             Job Application<br />
             <span className="bg-gradient-to-r from-blue-200 to-indigo-200 bg-clip-text text-transparent">
@@ -100,14 +100,14 @@ export default function LoginPage() {
       {/* ── Right Panel: Login Form ── */}
       <div className="flex flex-1 flex-col items-center justify-center bg-white dark:bg-slate-950 px-6 py-12 sm:px-10">
         {/* Mobile logo — only shows on small screens */}
-        <div className="mb-6 flex flex-col items-center lg:hidden">
+        <Link href="/" title="Go to Home" className="mb-6 flex flex-col items-center lg:hidden hover:opacity-90 transition-opacity cursor-pointer">
           <div className="h-20 w-20 overflow-hidden rounded-full bg-white shadow-xl ring-2 ring-slate-200 dark:ring-slate-700">
             <img src="/logo.png" alt="Job Tracker" className="h-full w-full object-cover" />
           </div>
           <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
             Job Tracker
           </p>
-        </div>
+        </Link>
 
         <div className="w-full max-w-sm space-y-7">
           {/* Heading */}
