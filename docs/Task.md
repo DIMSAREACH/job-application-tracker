@@ -6,7 +6,7 @@ Granular, actionable tasks derived from `Plan.md`. Check items off as you comple
 
 ## Phase 0 — Setup
 
-- [ ] Create GitHub repo `job-application-tracker`
+- [x] Create GitHub repo `job-application-tracker`
 - [x] Run `npx create-next-app@latest` with TypeScript, App Router, Tailwind enabled
 - [x] Verify dev server runs (`npm run dev`)
 - [x] Install shadcn/ui: `npx shadcn@latest init`
@@ -14,10 +14,10 @@ Granular, actionable tasks derived from `Plan.md`. Check items off as you comple
 - [x] Install Prisma: `npm install prisma --save-dev` and `npx prisma init`
 - [x] Spin up local Postgres via Docker (`docker-compose.yml` with a `postgres` service)
 - [x] Set `DATABASE_URL` in `.env.local` pointing to local Docker DB
-- [ ] Create Render account, provision a Postgres instance for staging/prod
-- [ ] Store Render `DATABASE_URL` as a Vercel environment variable (later, in Phase 5)
-- [ ] Push initial commit to GitHub
-- [ ] Create Vercel project, link to GitHub repo, confirm auto-deploy on push works with a placeholder page
+- [x] Create Render account, provision a Postgres instance for staging/prod
+- [x] Store Render `DATABASE_URL` as a Vercel environment variable (later, in Phase 5)
+- [x] Push initial commit to GitHub
+- [x] Create Vercel project, link to GitHub repo, confirm auto-deploy on push works with a placeholder page
 
 ## Phase 1 — Data layer
 
