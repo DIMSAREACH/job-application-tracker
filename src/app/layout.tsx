@@ -20,10 +20,16 @@ export const metadata: Metadata = {
   title: "Job Application Tracker — Job Search Command Center",
   description: "Track job applications, monitor interview progress, and record offer statuses in one place.",
   icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
+    icon: [
+      { url: "/logo.png", type: "image/png" },
+    ],
+    apple: [
+      { url: "/logo.png", type: "image/png" },
+    ],
+    shortcut: "/logo.png",
   },
 };
+
 
 
 export default function RootLayout({
