@@ -141,9 +141,14 @@ export async function requestPasswordResetAction(email: string) {
     });
 
     // Send email via Resend
-    await sendPasswordResetEmail(cleanEmail, token);
+    const mailResult = await sendPasswordResetEmail(cleanEmail, token);
+
+    if (!mailResult.success) {
+      return { success: false, error: mailResult.error || "Failed to send password reset email via Resend" };
+    }
 
     return { success: true };
+
   } catch (error) {
     console.error("requestPasswordResetAction error:", error);
     return { success: false, error: "Failed to process password reset request" };

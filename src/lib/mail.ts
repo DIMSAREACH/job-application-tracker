@@ -1,8 +1,9 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY || "re_dummy_key");
-
 export async function sendPasswordResetEmail(email: string, token: string) {
+
+  const apiKey = process.env.RESEND_API_KEY;
+
   const baseUrl = process.env.NEXTAUTH_URL
     ? process.env.NEXTAUTH_URL
     : process.env.VERCEL_URL
@@ -13,16 +14,19 @@ export async function sendPasswordResetEmail(email: string, token: string) {
 
   console.log(`[AUTH MAIL] Password Reset Link for ${email}: ${resetLink}`);
 
-  if (!process.env.RESEND_API_KEY) {
+  if (!apiKey) {
     console.warn("[RESEND] RESEND_API_KEY is not set in environment. Link logged to console above.");
-    return { success: true, link: resetLink };
+    return { success: false, error: "RESEND_API_KEY is missing in server environment settings." };
   }
+
+  const resend = new Resend(apiKey);
 
   try {
     const { data, error } = await resend.emails.send({
       from: "Job Tracker <onboarding@resend.dev>",
       to: [email],
       subject: "Reset your Job Tracker Password",
+
       html: `
         <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 520px; margin: 0 auto; padding: 28px; border: 1px solid #e2e8f0; border-radius: 20px; background-color: #ffffff; shadow: 0 10px 25px rgba(0,0,0,0.05);">
           <div style="text-align: center; margin-bottom: 20px;">
