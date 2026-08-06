@@ -137,12 +137,8 @@ export function UserProfileModal({
   /* ── File picked → open crop dialog ── */
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    e.target.value = "";                         // reset so same file can be re-selected
+    e.target.value = "";
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
-      setErrorMsg("Image must be less than 5 MB");
-      return;
-    }
     const reader = new FileReader();
     reader.onloadend = () => {
       setCropSrc(reader.result as string);
@@ -152,6 +148,7 @@ export function UserProfileModal({
     };
     reader.readAsDataURL(file);
   };
+
 
   const onCropComplete = useCallback((_: unknown, pixels: CropArea) => {
     setCroppedAreaPixels(pixels);
@@ -357,8 +354,9 @@ export function UserProfileModal({
                   )}
                 </div>
                 <p className="text-[11px] text-slate-400 dark:text-slate-500">
-                  PNG, JPG or GIF · Max 5 MB · Circular crop applied
+                  PNG, JPG or GIF · Circular crop applied
                 </p>
+
               </div>
             </div>
 
