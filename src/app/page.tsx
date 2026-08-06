@@ -67,13 +67,13 @@ export default function DashboardPage() {
     }
   );
 
-  const fetchApplications = async () => {
-    setLoading(true);
+  const fetchApplications = async (showLoading = false) => {
+    if (showLoading) setLoading(true);
     const res = await getApplicationsAction();
     if (res.success && res.data) {
       setApplications(res.data as ApplicationWithActivities[]);
     }
-    setLoading(false);
+    if (showLoading) setLoading(false);
   };
 
   const fetchUserProfile = async () => {
@@ -84,11 +84,23 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
-    fetchApplications();
+    fetchApplications(true);
     fetchUserProfile();
+
+    // Auto-refresh when tab becomes active / focused
+    const handleFocus = () => fetchApplications(false);
+    window.addEventListener("focus", handleFocus);
+
+    // Periodic silent background auto-refresh every 30s
+    const interval = setInterval(() => fetchApplications(false), 30000);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+      clearInterval(interval);
+    };
   }, []);
 
-  // Handlers
+  // Handlers with smooth optimistic updates and silent revalidation
   const handleStatusChange = async (
     id: string,
     newStatus: "APPLIED" | "INTERVIEWING" | "OFFER" | "REJECTED"
@@ -98,7 +110,7 @@ export default function DashboardPage() {
     });
     const res = await updateApplicationStatusAction(id, newStatus);
     if (res.success) {
-      fetchApplications();
+      fetchApplications(false);
     }
   };
 
@@ -108,7 +120,7 @@ export default function DashboardPage() {
     });
     const res = await toggleInterviewedAction(id);
     if (res.success) {
-      fetchApplications();
+      fetchApplications(false);
     }
   };
 
@@ -240,20 +252,20 @@ export default function DashboardPage() {
       <AddApplicationModal
         open={addModalOpen}
         onOpenChange={setAddModalOpen}
-        onSuccess={fetchApplications}
+        onSuccess={() => fetchApplications(false)}
       />
 
       <CsvImportModal
         open={importModalOpen}
         onOpenChange={setImportModalOpen}
-        onSuccess={fetchApplications}
+        onSuccess={() => fetchApplications(false)}
       />
 
       <EditApplicationModal
         application={editingApp}
         open={Boolean(editingApp)}
         onOpenChange={(open) => !open && setEditingApp(null)}
-        onSuccess={fetchApplications}
+        onSuccess={() => fetchApplications(false)}
       />
 
       <ApplicationHistoryModal
@@ -266,8 +278,9 @@ export default function DashboardPage() {
         id={deletingId}
         open={Boolean(deletingId)}
         onOpenChange={(open) => !open && setDeletingId(null)}
-        onSuccess={fetchApplications}
+        onSuccess={() => fetchApplications(false)}
       />
     </div>
+
   );
 }
