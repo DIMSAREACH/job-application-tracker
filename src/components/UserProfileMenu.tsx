@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { LogOut, Sparkles, ChevronDown, Settings } from "lucide-react";
+import { LogOut, Sparkles, Settings } from "lucide-react";
+
 import { logoutUserAction } from "@/actions/auth-actions";
 import { UserProfileModal } from "@/components/UserProfileModal";
 
@@ -46,14 +47,13 @@ export function UserProfileMenu({
   return (
     <>
       <div ref={containerRef} className="relative shrink-0">
-        {/* Trigger Button - Clean Pill Avatar */}
+        {/* Trigger Button - Clean Circular Profile Photo with Pulse Online Badge */}
         <button
           onClick={() => setOpen(!open)}
-          className="flex h-9 items-center gap-1 rounded-full border border-slate-200 bg-white p-1 pr-2.5 shadow-sm hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700 transition-all cursor-pointer"
-          title="User Profile & Settings"
+          className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-slate-900 p-0.5 shadow-md border-2 border-indigo-500/30 hover:border-indigo-500 dark:border-indigo-400/30 dark:hover:border-indigo-400 hover:scale-105 transition-all cursor-pointer shrink-0"
+          title={`${displayName} (Online) - Profile & Settings`}
         >
-          {/* Avatar Circle with Image or Initials */}
-          <div className="relative flex h-7 w-7 overflow-hidden items-center justify-center rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-xs font-bold text-white shadow-sm shrink-0">
+          <div className="flex h-full w-full overflow-hidden items-center justify-center rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-xs font-bold text-white shadow-inner">
             {userImage ? (
               <img
                 src={userImage}
@@ -63,21 +63,13 @@ export function UserProfileMenu({
             ) : (
               <span>{initials || "U"}</span>
             )}
-            <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
           </div>
 
-          {/* User Name (hidden on small screens) */}
-          <div className="hidden md:flex flex-col text-left leading-none px-1">
-            <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate max-w-[100px]">
-              {displayName}
-            </span>
-          </div>
-
-          <ChevronDown
-            className={`h-3.5 w-3.5 text-slate-400 dark:text-slate-500 transition-transform duration-200 ${
-              open ? "rotate-180" : ""
-            }`}
-          />
+          {/* Prominent Glowing Online Indicator */}
+          <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-950" />
+          </span>
         </button>
 
         {/* Popover Dropdown Menu */}
@@ -85,16 +77,19 @@ export function UserProfileMenu({
           <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl dark:border-slate-800 dark:bg-slate-950 backdrop-blur-xl">
             {/* Header Card */}
             <div className="flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50/80 p-3 dark:border-slate-800/80 dark:bg-slate-900/60 mb-1">
-              <div className="flex h-10 w-10 shrink-0 overflow-hidden items-center justify-center rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-sm font-extrabold text-white shadow-md">
-                {userImage ? (
-                  <img
-                    src={userImage}
-                    alt={displayName}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <span>{initials || "U"}</span>
-                )}
+              <div className="relative flex h-10 w-10 shrink-0 items-center justify-center">
+                <div className="flex h-full w-full overflow-hidden items-center justify-center rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-sm font-extrabold text-white shadow-md">
+                  {userImage ? (
+                    <img
+                      src={userImage}
+                      alt={displayName}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span>{initials || "U"}</span>
+                  )}
+                </div>
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
               </div>
               <div className="flex flex-col truncate">
                 <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
@@ -103,12 +98,19 @@ export function UserProfileMenu({
                 <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
                   {displayEmail}
                 </span>
-                <div className="mt-1 flex items-center gap-1 text-[10px] font-semibold text-indigo-600 dark:text-indigo-400">
-                  <Sparkles className="h-3 w-3" />
-                  <span>Job Tracker Member</span>
+                <div className="mt-1 flex items-center gap-1.5">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Online</span>
+                  </span>
+                  <span className="flex items-center gap-1 text-[10px] font-semibold text-indigo-600 dark:text-indigo-400">
+                    <Sparkles className="h-3 w-3" />
+                    <span>Member</span>
+                  </span>
                 </div>
               </div>
             </div>
+
 
             <div className="my-1 border-t border-slate-100 dark:border-slate-800/60" />
 

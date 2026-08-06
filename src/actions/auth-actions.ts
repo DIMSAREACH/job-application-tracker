@@ -119,9 +119,9 @@ export async function requestPasswordResetAction(email: string) {
     });
 
     if (!user) {
-      // Return success to avoid leaking account existence
-      return { success: true };
+      return { success: false, error: "No account found with this email address" };
     }
+
 
     const token = crypto.randomUUID();
     const expires = new Date(Date.now() + 3600 * 1000); // 1 hour token expiration
