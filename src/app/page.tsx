@@ -91,9 +91,25 @@ export default function DashboardPage() {
     }
   };
 
+  const loadInitialData = async () => {
+    setLoading(true);
+    const [appsRes, profileRes] = await Promise.all([
+      getApplicationsAction(),
+      getCurrentUserProfileAction(),
+    ]);
+
+    if (appsRes.success && appsRes.data) {
+      setApplications(appsRes.data as ApplicationWithActivities[]);
+      setLastSynced(new Date());
+    }
+    if (profileRes.success && profileRes.data) {
+      setUserProfile(profileRes.data);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    fetchApplications(true);
-    fetchUserProfile();
+    loadInitialData();
 
     // Auto-refresh when tab gains focus
     const handleFocus = () => {

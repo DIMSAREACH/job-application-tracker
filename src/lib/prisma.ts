@@ -18,11 +18,17 @@ function createPrismaClient() {
     return new PrismaClient({ adapter });
   }
 
-  const pool = new Pool({ connectionString: url });
+  const pool = new Pool({
+    connectionString: url,
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 5000,
+  });
   const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter });
 }
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+// Unconditionally preserve instance across serverless warm invocations for lightning-fast performance
+globalForPrisma.prisma = prisma;
