@@ -44,7 +44,8 @@ export default function LoginPage() {
       <div
         className="relative hidden lg:flex lg:w-1/2 xl:w-3/5 flex-col items-center justify-center overflow-hidden"
         style={{
-          backgroundImage: "url('/auth-bg.png')",
+          backgroundImage: "url('/image.png')",
+
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
